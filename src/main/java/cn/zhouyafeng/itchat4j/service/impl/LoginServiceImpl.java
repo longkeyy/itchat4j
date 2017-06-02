@@ -319,6 +319,7 @@ public class LoginServiceImpl implements ILoginService {
 				} else { // 普通联系人
 					core.getContactList().add(o);
 				}
+				core.addMember(o);
 			}
 			return;
 		} catch (Exception e) {
@@ -347,7 +348,6 @@ public class LoginServiceImpl implements ILoginService {
 	 *
 	 * @author https://github.com/yaphone
 	 * @date 2017年4月9日 下午12:16:26
-	 * @param result
 	 */
 	private void processLoginInfo(String loginContent) {
 		String regEx = "window.redirect_uri=\"(\\S+)\";";

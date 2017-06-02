@@ -1,5 +1,6 @@
 package cn.zhouyafeng.itchat4j.controller;
 
+import org.apache.commons.io.FileUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -9,6 +10,12 @@ import cn.zhouyafeng.itchat4j.service.ILoginService;
 import cn.zhouyafeng.itchat4j.service.impl.LoginServiceImpl;
 import cn.zhouyafeng.itchat4j.utils.SleepUtils;
 import cn.zhouyafeng.itchat4j.utils.tools.CommonTools;
+
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.nio.file.attribute.FileAttribute;
 
 /**
  * 登陆控制器
@@ -39,6 +46,14 @@ public class LoginController {
 					}
 				}
 				LOG.info("2. 获取登陆二维码图片");
+				if(!new File(qrPath).isDirectory()){
+					try {
+						FileUtils.forceMkdir(new File(qrPath));
+					} catch (IOException e) {
+						LOG.error("2. 存放图片目录不存在且建立失败");
+						System.exit(0);
+					}
+				}
 				if (loginService.getQR(qrPath)) {
 					break;
 				} else if (count == 10) {

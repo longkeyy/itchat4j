@@ -43,7 +43,7 @@ public class Core {
 	private List<JSONObject> msgList = new ArrayList<JSONObject>();
 
 	private JSONObject userSelf; // 登陆账号自身信息
-	private List<JSONObject> memberList = new ArrayList<JSONObject>(); // 好友+群聊+公众号+特殊账号
+	private Map<String, JSONObject> memberList = new HashMap<String, JSONObject>(); // 好友+群聊+公众号+特殊账号
 	private List<JSONObject> contactList = new ArrayList<JSONObject>();;// 好友
 	private List<JSONObject> groupList = new ArrayList<JSONObject>();; // 群
 	private List<JSONObject> groupMemeberList = new ArrayList<JSONObject>();; // 群聊成员字典
@@ -89,13 +89,26 @@ public class Core {
 		this.alive = alive;
 	}
 
-	public List<JSONObject> getMemberList() {
-		return memberList;
+	public void addMember(JSONObject jsonObject){
+		String userName = jsonObject.getString("UserName");
+		if(userName!=null){
+			memberList.put(userName,jsonObject);
+		}
 	}
 
-	public void setMemberList(List<JSONObject> memberList) {
-		this.memberList = memberList;
+	public JSONObject getMemberByUsername(String userName){
+		return memberList.get(userName);
 	}
+
+	public String getMemberNickName(String userName){
+		JSONObject jsonObject = memberList.get(userName);
+		if(jsonObject==null){
+			return userName;
+		} else {
+			return jsonObject.getString("NickName");
+		}
+	}
+
 
 	public Map<String, Object> getLoginInfo() {
 		return loginInfo;
