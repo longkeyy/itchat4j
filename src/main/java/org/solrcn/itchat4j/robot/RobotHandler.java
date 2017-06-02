@@ -23,7 +23,7 @@ import java.util.List;
 public abstract class RobotHandler implements IMsgHandlerFace, Robot {
     private static final Logger LOG = LoggerFactory.getLogger(RobotHandler.class);
 
-    @Value("${wx:data:data}")
+    @Value("${wx.data:data}")
     String dataDir;
 
     private String checkPath(String path){
