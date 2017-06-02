@@ -56,50 +56,64 @@ public class MsgCenter {
             } else {
                 CommonTools.msgFormatter(m, "Content");
             }
-            if (m.getInteger("MsgType") == MsgCodeEnum.MSGTYPE_TEXT.getCode()) { // words
-                // 文本消息
-                if (m.getString("Url").length() != 0) {
-                    String regEx = "(.+?\\(.+?\\))";
-                    Matcher matcher = CommonTools.getMatcher(regEx, m.getString("Content"));
-                    String data = "Map";
-                    if (matcher.find()) {
-                        data = matcher.group(1);
+            Integer msgType = m.getInteger("MsgType");
+            MsgCodeEnum msgCodeEnum = MsgCodeEnum.codeOf(msgType);
+            switch (msgCodeEnum) {
+                case MSGTYPE_TEXT:
+                    // 文本消息
+                    if (m.getString("Url").length() != 0) {
+                        String regEx = "(.+?\\(.+?\\))";
+                        Matcher matcher = CommonTools.getMatcher(regEx, m.getString("Content"));
+                        String data = "Map";
+                        if (matcher.find()) {
+                            data = matcher.group(1);
+                        }
+                        msg.put("Type", "Map");
+                        msg.put("Text", data);
+                    } else {
+                        msg.put("Type", MsgTypeEnum.TEXT.getType());
+                        msg.put("Text", m.getString("Content"));
                     }
-                    msg.put("Type", "Map");
-                    msg.put("Text", data);
-                } else {
-                    msg.put("Type", MsgTypeEnum.TEXT.getType());
-                    msg.put("Text", m.getString("Content"));
-                }
-                m.put("Type", msg.getString("Type"));
-                m.put("Text", msg.getString("Text"));
-            } else if (m.getInteger("MsgType") == MsgCodeEnum.MSGTYPE_IMAGE.getCode()
-                    || m.getInteger("MsgType") == MsgCodeEnum.MSGTYPE_EMOTICON.getCode()) { // 图片消息
-                m.put("Type", MsgTypeEnum.PIC.getType());
-            } else if (m.getInteger("MsgType") == MsgCodeEnum.MSGTYPE_VOICE.getCode()) { // 语音消息
-                m.put("Type", MsgTypeEnum.VOICE.getType());
-            } else if (m.getInteger("MsgType") == MsgCodeEnum.MSGTYPE_VERIFYMSG.getCode()) {// friends
-                // 好友确认消息
-
-            } else if (m.getInteger("MsgType") == MsgCodeEnum.MSGTYPE_SHARECARD.getCode()) { // 共享名片
-                m.put("Type", MsgTypeEnum.NAMECARD.getType());
-
-            } else if (m.getInteger("MsgType") == MsgCodeEnum.MSGTYPE_VIDEO.getCode()
-                    || m.getInteger("MsgType") == MsgCodeEnum.MSGTYPE_MICROVIDEO.getCode()) {// viedo
-                m.put("Type", MsgTypeEnum.VIEDO.getType());
-            } else if (m.getInteger("MsgType") == MsgCodeEnum.MSGTYPE_APP.getCode()) { // sharing
-                // 分享链接
-
-            } else if (m.getInteger("MsgType") == MsgCodeEnum.MSGTYPE_STATUSNOTIFY.getCode()) {// phone
-                // init
-                // 微信初始化消息
-
-            } else if (m.getInteger("MsgType") == MsgCodeEnum.MSGTYPE_SYS.getCode()) {// 系统消息
-
-            } else if (m.getInteger("MsgType") == MsgCodeEnum.MSGTYPE_RECALLED.getCode()) { // 撤回消息
-
-            } else {
-                LOG.info("Useless msg");
+                    m.put("Type", msg.getString("Type"));
+                    m.put("Text", msg.getString("Text"));
+                    break;
+                case MSGTYPE_IMAGE:
+                    //图片
+                case MSGTYPE_EMOTICON:
+                    //表情
+                    m.put("Type", MsgTypeEnum.PIC.getType());
+                    break;
+                case MSGTYPE_VOICE:
+                    m.put("Type", MsgTypeEnum.VOICE.getType());
+                    break;
+                case MSGTYPE_VERIFYMSG:
+                    //好友验证
+                    break;
+                case MSGTYPE_SHARECARD:
+                    // 共享名片
+                    m.put("Type", MsgTypeEnum.NAMECARD.getType());
+                    break;
+                case MSGTYPE_VIDEO:
+                    //视频
+                case MSGTYPE_MICROVIDEO:
+                    m.put("Type", MsgTypeEnum.VIEDO.getType());
+                    break;
+                case MSGTYPE_APP:
+                    // 分享链接
+                    break;
+                case MSGTYPE_STATUSNOTIFY:
+                    // phone
+                    // init
+                    // 微信初始化消息
+                    break;
+                case MSGTYPE_SYS:
+                    //系统消息
+                    break;
+                case MSGTYPE_RECALLED:
+                    // 撤回消息
+                    break;
+                default:
+                    LOG.info("Useless msg");
             }
             LOG.info("收到消息一条，来自: " + core.getMemberNickName(m.getString("FromUserName")));
             result.add(m);
@@ -146,7 +160,7 @@ public class MsgCenter {
                             break;
                         default:
                     }
-                    if (result!=null && !result.isEmpty()) {
+                    if (result != null && !result.isEmpty()) {
                         MessageTools.sendMsgById(result, fromUserName);
                     }
                 }
