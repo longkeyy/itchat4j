@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.LinkedBlockingQueue;
 
 import com.alibaba.fastjson.JSONObject;
 
@@ -40,7 +41,9 @@ public class Core {
 
 	private String userName;
 	private String nickName;
-	private List<JSONObject> msgList = new ArrayList<JSONObject>();
+//	private List<JSONObject> msgList = new ArrayList<JSONObject>();
+
+	private LinkedBlockingQueue<JSONObject> msgList = new LinkedBlockingQueue();
 
 	private JSONObject userSelf; // 登陆账号自身信息
 	private Map<String, JSONObject> memberList = new HashMap<String, JSONObject>(); // 好友+群聊+公众号+特殊账号
@@ -162,12 +165,20 @@ public class Core {
 		return myHttpClient;
 	}
 
-	public List<JSONObject> getMsgList() {
-		return msgList;
+//	public List<JSONObject> getMsgList() {
+//		return msgList;
+//	}
+
+//	public void setMsgList(List<JSONObject> msgList) {
+//		this.msgList = msgList;
+//	}
+
+	public boolean offerMsg(JSONObject msg){
+		return msgList.offer(msg);
 	}
 
-	public void setMsgList(List<JSONObject> msgList) {
-		this.msgList = msgList;
+	public JSONObject takeMsg() throws InterruptedException {
+		return msgList.take();
 	}
 
 	public void setMyHttpClient(MyHttpClient myHttpClient) {

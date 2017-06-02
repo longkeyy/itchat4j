@@ -27,4 +27,13 @@ public enum RetCodeEnum {
 		return type;
 	}
 
+	public static RetCodeEnum codeOf(String code){
+		RetCodeEnum[] values = RetCodeEnum.values();
+		for (RetCodeEnum v : values){
+			if(v.getCode().equals(code))
+				return v;
+		}
+		return UNKOWN;
+	}
+
 }

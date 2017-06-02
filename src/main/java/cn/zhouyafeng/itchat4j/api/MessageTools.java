@@ -48,7 +48,7 @@ public class MessageTools {
 	 * @param toUserName
 	 */
 	private static void sendMsg(String text, String toUserName) {
-		LOG.info(String.format("发送消息 %s: %s", toUserName, text));
+		LOG.info(String.format("发送消息 %s: %s", Core.getInstance().getMemberNickName(toUserName), text));
 		webWxSendMsg(1, text, toUserName);
 	}
 

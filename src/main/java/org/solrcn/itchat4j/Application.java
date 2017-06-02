@@ -23,14 +23,13 @@ public class Application implements ApplicationRunner {
     @Autowired
     SimsimiRobot simsimiRobot;
 
-    @Value("${wx.data:./data}")
+    @Value("${wx.data:data}")
     String appdata;
 
     @Override
     public void run(ApplicationArguments applicationArguments) {
-        Wechat wechat = new Wechat(simsimiRobot, appdata +"/login");
+        Wechat wechat = new Wechat(tulingRobot, appdata +"/login");
         wechat.start();
-
     }
 
     public static void main(String[] args) {

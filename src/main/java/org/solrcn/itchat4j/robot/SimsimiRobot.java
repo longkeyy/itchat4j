@@ -37,6 +37,6 @@ public class SimsimiRobot extends RobotHandler {
         } catch (Exception e) {
             logger.warning(e.getMessage());
         }
-        return null;
+        return "好好说话";
     }
 }

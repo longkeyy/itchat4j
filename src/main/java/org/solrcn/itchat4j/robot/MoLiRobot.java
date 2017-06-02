@@ -36,6 +36,6 @@ public class MoLiRobot extends RobotHandler {
         } catch (IOException e) {
             logger.warning(e.getMessage());
         }
-        return null;
+        return "好好说话";
     }
 }

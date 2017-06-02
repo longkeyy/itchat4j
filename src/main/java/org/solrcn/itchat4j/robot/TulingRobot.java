@@ -44,13 +44,11 @@ public class TulingRobot extends RobotHandler {
             result = EntityUtils.toString(entity, "UTF-8");
             JSONObject obj = JSON.parseObject(result);
             if (obj.getString("code").equals("100000")) {
-                result = obj.getString("text");
-            } else {
-                result = "我不知道该怎么办";
+                return obj.getString("text");
             }
         } catch (Exception e) {
             logger.warning(e.getMessage());
         }
-        return result;
+        return "好好说话";
     }
 }

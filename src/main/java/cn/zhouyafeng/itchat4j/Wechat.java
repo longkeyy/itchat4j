@@ -11,7 +11,6 @@ import cn.zhouyafeng.itchat4j.face.IMsgHandlerFace;
 public class Wechat {
 	private static final Logger LOG = LoggerFactory.getLogger(Wechat.class);
 	private IMsgHandlerFace msgHandler;
-	private Core core = Core.getInstance();
 
 	public Wechat(IMsgHandlerFace msgHandler, String qrPath) {
 		System.setProperty("jsse.enableSNIExtension", "false"); // 防止SSL错误
@@ -27,7 +26,12 @@ public class Wechat {
 		new Thread(new Runnable() {
 			@Override
 			public void run() {
-				MsgCenter.handleMsg(msgHandler);
+				try {
+					MsgCenter.handleMsg(msgHandler);
+				} catch (InterruptedException e) {
+//					e.printStackTrace();
+					return;
+				}
 			}
 		}).start();
 	}
